@@ -1,19 +1,69 @@
-# Linkedin-Profiles-Scraper
+🔍 LinkedIn Profiles Scraper
+A Python automation tool that searches LinkedIn's People search for professionals matching specific financial industry keywords, visits each profile, and exports the data into a structured CSV and JSON file — all using a real browser to avoid detection.
+
+✨ Features
+
+🧠 Keyword-targeted search — finds professionals mentioning IUL, LIRP, Cash Value Life Insurance, and related terms
+🌐 Paginated URL collection — crawls LinkedIn People search results and collects up to 100 profile URLs
+👤 Deep profile extraction — scrapes name, headline, location, about, experience, education, skills, current title, and company
+📬 Contact info extraction — opens the contact info overlay to capture emails, phone numbers, and websites
+🔎 Smart keyword matching — uses word-boundary regex to ensure accurate matches (no false partial hits)
+💾 Resume capability — saves progress after every profile so no data is lost if the run is interrupted
+🕐 Human-like behavior — random delays (3–25 seconds) between requests to avoid LinkedIn bot detection
+📁 Dual output — exports final results as both .csv and .json
 
 
-LinkedIn Profile Scraper — Code Description
-This is a Python-based LinkedIn profile scraper built using Playwright for browser automation. Its purpose is to search LinkedIn for professionals matching specific financial industry keywords — such as Indexed Universal Life (IUL), LIRP, and Cash Value Life Insurance — and extract their profile data into a structured CSV file.
-How It Works:
-The script opens a real Chromium browser window and prompts the user to manually log in to LinkedIn. This avoids storing credentials in code. Once logged in, it runs in two phases:
+🎯 Target Keywords
+The scraper searches for profiles containing any of:
 
-URL Collection — It paginates through LinkedIn's People search results for the configured query and collects up to 100 profile URLs, saving them intermediately to a JSON file so the run can be resumed if interrupted.
-Profile Extraction — For each profile URL, it visits the page and scrapes: name, headline, location, about section, experience, education, skills, current title, current company, and contact information (email, phone, website) from the contact info overlay.
+Indexed Universal Life
+IUL
+LIRP
+Life Insurance Retirement Plan
+Cash Value Life Insurance
 
-After extracting all text, it runs keyword matching against the target terms using word-boundary regex — ensuring accurate matches rather than partial hits.
-Key Features:
+These are fully configurable in the CONFIG section at the top of the script.
 
-Random delays between requests (3–25 seconds) to mimic human behavior and avoid detection
-Resume capability — partial results are saved after every profile so no data is lost if the run crashes
-Final output exported as both CSV and JSON
+🛠️ Requirements
+bashpip install playwright pandas
+playwright install chromium
 
-Output fields: profile URL, name, headline, location, about, experience, education, skills, current title, current company, matched keywords, contact details, and timestamp.
+⚙️ Configuration
+Edit the CONFIG section at the top of linkedin_scraper.py:
+pythonMAX_PROFILES = 100          # How many profiles to scrape
+OUTPUT_FILE = "results.csv" # Output filename
+HEADLESS = False            # Set True to run browser in background
+You can also customize SEARCH_QUERY and KEYWORDS_TO_MATCH to target any industry or niche.
+
+▶️ Usage
+bashpython linkedin_scraper.py
+
+A Chromium browser window will open
+Manually log in to your LinkedIn account
+Press Enter in the terminal once you're on your feed
+The scraper will automatically collect profile URLs, then visit and extract each one
+
+
+📁 Output
+Results are saved to results.csv and results_full.json with the following fields:
+FieldDescriptionnameFull nameheadlineProfile headlinelocationLocationaboutAbout/summary sectionexperienceFull experience section texteducationEducation section textskillsTop skillscurrent_titleCurrent job titlecurrent_companyCurrent companymatched_keywordsWhich target keywords were foundcontact_emailEmail (if publicly listed)contact_phonePhone (if publicly listed)contact_websiteWebsite (if publicly listed)profile_urlDirect LinkedIn profile linktimestampTime of scrape
+
+🔄 Resume Support
+If the script crashes or is interrupted, simply run it again — it will automatically skip already-scraped profiles using the intermediate save files:
+
+profile_urls.json — collected profile URLs
+rows_partial.json — partially scraped rows
+
+
+📝 Notes
+
+LinkedIn's free accounts have profile view limits — use a Sales Navigator or Recruiter account for larger scrapes
+The scraper uses a persistent browser session stored in the session/ folder — you only need to log in once
+Manual login is intentional to avoid storing credentials in code
+
+
+⚠️ Disclaimer
+This tool is intended for personal or research use only. Ensure your usage complies with LinkedIn's Terms of Service. The authors are not responsible for any misuse or account restrictions.
+
+📄 License
+MIT License
